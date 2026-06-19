@@ -1,9 +1,11 @@
 
+
+cat > server.js << 'SERVEREOF'
 import { WebSocketServer } from "ws";
 
 const wss = new WebSocketServer({ port: 8080 });
 
-const handlers = new Map<string, (request: Record<string, unknown>, ws: WebSocket) => Promise<Record<string, unknown>>>();
+const handlers = new Map();
 
 handlers.set("system.info", async (request) => ({
   requestId: request.requestId,
@@ -18,11 +20,11 @@ handlers.set("system.exec", async (request) => ({
 }));
 
 handlers.set("task.run", async (request, ws) => {
-  const taskId = `task_${Date.now()}`;
+  const taskId = "task_" + Date.now();
   
   ws.send(JSON.stringify({
     type: "task.event",
-    taskId,
+    taskId: taskId,
     status: "running",
     timestamp: Date.now()
   }));
@@ -30,7 +32,7 @@ handlers.set("task.run", async (request, ws) => {
   setTimeout(() => {
     ws.send(JSON.stringify({
       type: "task.event",
-      taskId,
+      taskId: taskId,
       status: "completed",
       timestamp: Date.now()
     }));
@@ -39,7 +41,7 @@ handlers.set("task.run", async (request, ws) => {
   return {
     requestId: request.requestId,
     success: true,
-    result: { taskId, status: "running" }
+    result: { taskId: taskId, status: "running" }
   };
 });
 
@@ -75,7 +77,14 @@ wss.on("connection", (ws) => {
       
       const response = handler 
         ? await handler(request, ws)
-        : { requestId: request.requestId, success: false, error: { code: "UNKNOWN_OPCODE", message: `Unknown: ${request.opcode}` } };
+        : { 
+            requestId: request.requestId, 
+            success: false, 
+            error: { 
+              code: "UNKNOWN_OPCODE", 
+              message: "Unknown: " + request.opcode 
+            } 
+          };
       
       ws.send(JSON.stringify(response));
     } catch (err) {
@@ -87,8 +96,8 @@ wss.on("connection", (ws) => {
 });
 
 console.log("Server: ws://localhost:8080");
-EOF
+SERVEREOF
 
-# تأكد من إنشائه
-ls -la server.ts
-cat server.ts | head -5
+# تأكد
+ls -la server.js
+node server.js
