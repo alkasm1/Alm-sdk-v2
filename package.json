@@ -1,0 +1,73 @@
+{
+  "name": "alm-sdk",
+  "version": "2.0.0",
+  "description": "ALM SDK - Event Sourcing Client SDK for real-time system orchestration over WebSocket",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui",
+    "lint": "eslint src tests",
+    "lint:fix": "eslint src tests --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm run test"
+  },
+  "keywords": [
+    "sdk",
+    "websocket",
+    "event-driven",
+    "event-sourcing",
+    "alm",
+    "realtime",
+    "device",
+    "task",
+    "orchestration",
+    "iot",
+    "security",
+    "middleware",
+    "rpc"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/alm-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/alm-sdk/issues"
+  },
+  "homepage": "https://github.com/your-org/alm-sdk#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ws": "^8.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/ws": "^8.5.10",
+    "@vitest/coverage-v8": "^1.6.0",
+    "@vitest/ui": "^1.6.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.0",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}
